@@ -24,8 +24,8 @@ pub struct OpenOrdersAccount {
 ///
 /// Note that `owner` might own multiple open orders accounts per market.
 pub fn fetch_open_orders_accounts(
-    rpc_client: RpcClient,
-    owner: Pubkey,
+    rpc_client: &RpcClient,
+    owner: &Pubkey,
 ) -> ClientResult<impl Iterator<Item = OpenOrdersAccount>> {
     let config = RpcProgramAccountsConfig {
         filters: Some(vec![
