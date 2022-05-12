@@ -1,7 +1,10 @@
 [package]
 name = "solana-commons"
+description = "Utilities for interacting with the Solana ecosystem"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+respository = "https://github.com/elementcapital/solana-commons"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
