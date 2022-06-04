@@ -1,7 +1,7 @@
 [package]
 name = "solana-commons"
 description = "Utilities for interacting with the Solana ecosystem"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 license = "MIT"
 respository = "https://github.com/elementcapital/solana-commons"
@@ -15,3 +15,8 @@ solana-account-decoder = "1.9.21"
 memoffset = "0.6.5"
 serum_dex = { version = "0.5.4", features = ["no-entrypoint"] }
 thiserror = "1.0"
+reqwest = { version = "0.11", features = ["json"] }
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_repr = "0.1"
