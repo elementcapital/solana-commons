@@ -1,3 +1,6 @@
+use std::convert::identity;
+
+use safe_transmute::transmute_to_bytes;
 use serum_dex::state::{OpenOrders, ACCOUNT_HEAD_PADDING, ACCOUNT_TAIL_PADDING};
 use solana_account_decoder::UiAccountEncoding;
 use solana_client::{
@@ -61,4 +64,10 @@ pub fn fetch_open_orders_accounts(
             open_orders: pubkey,
         }
     }))
+}
+
+/// Pubkeys are serialized as `[u64; 4]` in Serum's accounts. This function
+/// transmute them into `Pubkey`.
+pub fn transmute_pubkey(bytes: [u64; 4]) -> Pubkey {
+    Pubkey::new(transmute_to_bytes(&identity(bytes)))
 }
