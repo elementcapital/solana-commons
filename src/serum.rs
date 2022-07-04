@@ -1,5 +1,6 @@
 use std::convert::identity;
 
+use bytemuck::{try_from_bytes, PodCastError};
 use safe_transmute::transmute_to_bytes;
 use serum_dex::state::{OpenOrders, ACCOUNT_HEAD_PADDING, ACCOUNT_TAIL_PADDING};
 use solana_account_decoder::UiAccountEncoding;
@@ -51,8 +52,7 @@ pub fn fetch_open_orders_accounts(
     };
     let accounts = rpc_client.get_program_accounts_with_config(&PROGRAM_ID, config)?;
     Ok(accounts.into_iter().map(|(pubkey, account)| {
-        let data = &account.data
-            [ACCOUNT_HEAD_PADDING.len()..account.data.len() - ACCOUNT_TAIL_PADDING.len()];
+        let data = strip_header(&account.data[..]);
         let mut bytes = [0u8; PUBKEY_BYTES];
 
         let offset = memoffset::offset_of!(OpenOrders, market);
@@ -70,4 +70,29 @@ pub fn fetch_open_orders_accounts(
 /// transmute them into `Pubkey`.
 pub fn transmute_pubkey(bytes: [u64; 4]) -> Pubkey {
     Pubkey::new(transmute_to_bytes(&identity(bytes)))
+}
+
+/// Decode the amount of tokens held in an open orders account
+/// Returns (native_coin_free, native_coin_total, native_pc_free, native_pc_total)
+pub fn decode_open_orders_reserve(data: &[u8]) -> Result<(u64, u64, u64, u64), PodCastError> {
+    // strip padding
+    let data = strip_header(data);
+    let &OpenOrders {
+        native_coin_free,
+        native_coin_total,
+        native_pc_free,
+        native_pc_total,
+        ..
+    } = try_from_bytes::<OpenOrders>(data)?;
+
+    Ok((
+        native_coin_free,
+        native_coin_total,
+        native_pc_free,
+        native_pc_total,
+    ))
+}
+
+fn strip_header<'a>(data: &'a [u8]) -> &'a [u8] {
+    &data[ACCOUNT_HEAD_PADDING.len()..data.len() - ACCOUNT_TAIL_PADDING.len()]
 }
