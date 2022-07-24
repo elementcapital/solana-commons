@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
-use solana_sdk::pubkey::Pubkey;
+use solana_program::pubkey::Pubkey;
 use thiserror::Error;
 
 use crate::deserialize_pubkey;

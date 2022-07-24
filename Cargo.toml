@@ -9,8 +9,8 @@ respository = "https://github.com/elementcapital/solana-commons"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-solana-sdk = "~1.10.25"
-solana-client = "~1.10.25"
+solana-program = "~1.10.25"
+solana-client = { version = "~1.10.25", optional = true }
 solana-account-decoder = "~1.10.25"
 memoffset = "0.6.5"
 serum_dex = { version = "0.5.4", features = ["no-entrypoint"] }
@@ -18,7 +18,12 @@ thiserror = "1.0"
 reqwest = { version = "0.11", features = ["json"] }
 safe-transmute = "0.11.2"
 bytemuck = "1"
+bs58 = "0.4"
 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_repr = "0.1"
+
+[features]
+default = ["solana-client"]
+program = []

@@ -4,14 +4,15 @@ use bytemuck::{try_from_bytes, PodCastError};
 use safe_transmute::transmute_to_bytes;
 use serum_dex::state::{OpenOrders, ACCOUNT_HEAD_PADDING, ACCOUNT_TAIL_PADDING};
 use solana_account_decoder::UiAccountEncoding;
+#[cfg(not(feature = "program"))]
 use solana_client::{
     client_error::Result as ClientResult,
     rpc_client::RpcClient,
     rpc_config::{RpcAccountInfoConfig, RpcProgramAccountsConfig},
     rpc_filter::{Memcmp, MemcmpEncodedBytes, RpcFilterType},
 };
-use solana_sdk::{
-    bs58, pubkey,
+use solana_program::{
+    pubkey,
     pubkey::{Pubkey, PUBKEY_BYTES},
 };
 
@@ -27,6 +28,7 @@ pub struct OpenOrdersAccount {
 /// Fetch all open orders accounts owned by `owner`.
 ///
 /// Note that `owner` might own multiple open orders accounts per market.
+#[cfg(not(feature = "program"))]
 pub fn fetch_open_orders_accounts(
     rpc_client: &RpcClient,
     owner: &Pubkey,

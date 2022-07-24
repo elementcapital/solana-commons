@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use serde::de::Error;
 use serde::{Deserialize, Deserializer};
-use solana_sdk::pubkey::Pubkey;
+use solana_program::pubkey::Pubkey;
 
 pub mod serum;
 pub mod spl_token;
